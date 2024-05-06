@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.batm.exercise.DTO.ForgotPasswordDTO;
 import com.batm.exercise.DTO.LoginDTO;
 import com.batm.exercise.models.*;
 import com.batm.exercise.repository.EmployeeRepository;
@@ -62,4 +63,26 @@ public class AuthController {
     model.addAttribute("employee", employee);
     return "main/index";
   }
+
+    @GetMapping("forgotPassword")
+    public String forgotPassword(Model model){
+        model.addAttribute("forgotPasswordDTO", new ForgotPasswordDTO());
+        return "auth/forgotPassword";
+    }
+   
+    @PostMapping("resetPassword")
+    public String resetPassword(ForgotPasswordDTO forgotpassData) {
+        String email = forgotpassData.getEmail();
+
+        List<Employee> allEmployee = employeeRepository.findAll();
+        for (Employee e : allEmployee) {
+            if(e.getEmail().equals(email)){
+                String newPassword = forgotpassData.getNewPassword();
+                e.getUser().setPassword(newPassword);
+                employeeRepository.save(e);
+                return "redirect:/auth/form";
+            }
+        }    
+        return "redirect:/auth/forgotPassword";
+    };
 }
