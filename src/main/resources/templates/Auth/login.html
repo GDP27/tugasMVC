@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+</head>
+<body>
+  <form method="POST" th:action="@{/auth/login}">
+    <label for="emailInput">Email :</label>
+    <input type="email" name="emailInput" required th:field="${loginData.email}">
+    <label for="passwordInput">Password :</label>
+    <input type="password" name="passwordInput" required th:field="${loginData.password}">
+    <button type="submit">Login</button>
+  </form>
+  <div th:if="${param.error}">
+    <p style="color:red">Email atau password salah. Silakan coba lagi.</p>
+  </div>
+</body>
+</html>
